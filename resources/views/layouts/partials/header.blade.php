@@ -1,0 +1,39 @@
+<div class="ml-auto mb-10 flex items-center gap-6">
+
+    {{-- NOTIFIKASI --}}
+    <button
+        type="button"
+        aria-label="Notifikasi"
+        class="relative flex h-[50px] w-[30px] cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+    >
+
+        <img
+            src="{{ asset('image/nontification.png') }}"
+            alt="Notifikasi"
+            class="h-[25px] w-[25px] object-contain"
+        >
+
+        {{-- titik notifikasi --}}
+        <span
+            class="absolute right-0 top-[9px] h-[6px] w-[6px] rounded-full bg-[#639178]"
+        ></span>
+
+    </button>
+
+
+    {{-- PROFILE --}}
+    <button
+        type="button"
+        aria-label="Profil saya"
+        class="flex h-[50px] w-[50px] cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+    >
+
+        <img
+            src="{{ asset('image/profile.png') }}"
+            alt="Foto profil pengguna"
+            class="block h-[50px] w-[50px] rounded-full object-cover"
+        >
+
+    </button>
+
+</div>
