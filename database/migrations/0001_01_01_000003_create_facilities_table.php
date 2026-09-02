@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('category');
             $table->string('location');
             $table->text('description')->nullable();
-            $table->integer('capacity');
+            $table->integer('capacity')->nullable();
             $table->string('status')->default('active');
             $table->string('image')->nullable();
             $table->timestamps();

@@ -22,7 +22,7 @@ class FacilityController extends Controller
         return view('admin.facilities.create');
     }
 
-    // Store new facility from admin panel
+    // Store new facility data from admin panel
     public function store(Request $request)
     {
         $validated = $this->validated($request);
