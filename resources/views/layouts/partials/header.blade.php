@@ -1,4 +1,4 @@
-<div class="ml-auto mb-10 flex items-center gap-6">
+<div class="ml-auto mb-5 flex items-center gap-6">
 
     {{-- NOTIFIKASI --}}
     <button
@@ -10,7 +10,7 @@
         <img
             src="{{ asset('image/nontification.png') }}"
             alt="Notifikasi"
-            class="h-[25px] w-[25px] object-contain"
+            class="h-[40px] w-[40px] object-contain"
         >
 
         {{-- titik notifikasi --}}
@@ -25,13 +25,13 @@
     <button
         type="button"
         aria-label="Profil saya"
-        class="flex h-[50px] w-[50px] cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+        class="flex h-[65px] w-[65px] cursor-pointer items-center justify-center border-0 bg-transparent p-0"
     >
 
         <img
             src="{{ asset('image/profile.png') }}"
             alt="Foto profil pengguna"
-            class="block h-[50px] w-[50px] rounded-full object-cover"
+            class="block h-[65px] w-[65px] rounded-full object-cover"
         >
 
     </button>
