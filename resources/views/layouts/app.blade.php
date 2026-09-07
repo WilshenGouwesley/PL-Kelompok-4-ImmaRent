@@ -19,9 +19,11 @@
     <!-- Content End -->
 
     <!-- Footer Start -->
-    <div class="py-7">
-        @include('layouts.partials.footer')
-    </div>
+    @if (!request()->routeIs(['login', 'register']))
+        <div class="py-7">
+            @include('layouts.partials.footer')
+        </div>
+    @endif
     <!-- Footer End -->
 
 </body>

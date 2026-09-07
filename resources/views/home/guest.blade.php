@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Beranda - Reservasi Fasilitas Sekolah')
+@section('title', 'GuestHome - Reservasi Fasilitas Sekolah')
 
 @section('content')
 
