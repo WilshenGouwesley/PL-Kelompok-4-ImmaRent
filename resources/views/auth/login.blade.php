@@ -207,7 +207,7 @@
 
                 {{-- LOGIN BUTTON --}}
                 <a
-                    href="#"
+                    href="{{ route('home') }}"
                     class="
                         flex
                         mt-[20px]

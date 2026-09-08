@@ -21,24 +21,18 @@ class LoginController extends Controller
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required'],
         ]);
 
-        $remember = $request->boolean('remember');
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        if (! Auth::attempt($credentials, $remember)) {
-            return back()
-                ->withInput($request->only('email'))
-                ->withErrors(['email' => 'Email atau password yang Anda masukkan salah.']);
+            return redirect()->route('dashboard');
         }
 
-        $request->session()->regenerate();
-
-        $user = Auth::user();
-
-        return redirect()->intended(
-            $user->role === 'admin' ? route('admin.dashboard') : route('dashboard')
-        );
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 
     public function destroy(Request $request)
