@@ -161,6 +161,7 @@
                     <input
                         id="password"
                         type="password"
+                        name="password"
                         placeholder="Enter your password"
                         class="
                             h-[41px]
@@ -182,6 +183,7 @@
                     {{-- PASSWORD ICON --}}
                     <button
                         type="button"
+                        id="togglePassword"
                         class="
                             absolute
                             right-[8px]
@@ -193,7 +195,7 @@
                         "
                     >
                         <span class="text-[12px] text-gray-400 ">
-                            <img src="{{ asset('image/PW-icon.png') }}" class="h-[12px] w-[15px]">
+                            <img id="passwordIcon" src="{{ asset('image/PW-icon.png') }}" class="h-[12px] w-[15px]" alt="Show password">
                         </span>
                     </button>
 
@@ -219,9 +221,10 @@
                     </label>
 
                     <input
-                        id="confirm-pw"
-                        type="confirm-pw"
-                        placeholder="Confirm your password"
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
                         class="
                             h-[41px]
                             w-full
@@ -242,6 +245,7 @@
                     {{-- PASSWORD ICON --}}
                     <button
                         type="button"
+                        id="togglePassword"
                         class="
                             absolute
                             right-[8px]
@@ -253,7 +257,7 @@
                         "
                     >
                         <span class="text-[12px] text-gray-400 ">
-                            <img src="{{ asset('image/PW-icon.png') }}" class="h-[13px] w-[15px]">
+                            <img id="passwordIcon" src="{{ asset('image/PW-icon.png') }}" class="h-[12px] w-[15px]" alt="Show password">
                         </span>
                     </button>
 
@@ -313,5 +317,17 @@
     </main>
 
 </div>
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function () {
+        if (password.type === 'password') {
+            password.type = 'text';
+        } else {
+            password.type = 'password';
+        }
+    });
+</script>
 
 @endsection

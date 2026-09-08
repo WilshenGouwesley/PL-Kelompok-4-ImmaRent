@@ -133,213 +133,59 @@
                     <div id="facility-carousel" class="w-full overflow-hidden">
 
                         {{-- TRACK --}}
-                        <div id="facility-track" class="flex gap-6 transition-transform duration-500 ease-in-out">
-
-                            {{-- ================= CARD 1 ================= --}}
-                            <article
-                                class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0">
-
-                                {{-- IMAGE --}}
-                                <div class="h-[145px] w-full overflow-hidden rounded-lg">
-                                    <img src="{{ asset('image/transparan.png') }}" alt="Computer Laboratory"
-                                        class="h-full w-full object-cover">
-                                </div>
-
-                                {{-- NAME --}}
-                                <div class="mt-3 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/building-icon.png') }}" alt=""
-                                        class="h-[30px] w-[30px] object-contain">
-
-                                    <p class="text-[18px] font-semibold text-[#303030]">
-                                        Computer Laboratory
-                                    </p>
-
-                                </div>
-
-                                {{-- LOCATION --}}
-                                <div class="mt-1 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/location-icon.png') }}" alt=""
-                                        class="h-[28px] w-[28px] object-contain">
-
-                                    <p class="text-[15px] text-gray-500">
-                                        IELTS Centre
-                                    </p>
-
-                                </div>
-
-                            </article>
-
-
-                            {{-- ================= CARD 2 ================= --}}
-                            <article
-                                class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0">
-
-                                <div class="h-[145px] w-full overflow-hidden rounded-lg">
-                                    <img src="{{ asset('image/transparan.png') }}" alt="Computer Laboratory"
-                                        class="h-full w-full object-cover">
-                                </div>
-
-                                <div class="mt-3 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/building-icon.png') }}" alt=""
-                                        class="h-[30px] w-[30px] object-contain">
-
-                                    <p class="text-[18px] font-semibold text-[#303030]">
-                                        Computer Laboratory
-                                    </p>
-
-                                </div>
-
-                                <div class="mt-1 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/location-icon.png') }}" alt=""
-                                        class="h-[28px] w-[28px] object-contain">
-
-                                    <p class="text-[15px] text-gray-500">
-                                        IELTS Centre
-                                    </p>
-
-                                </div>
-
-                            </article>
-
-
-                            {{-- ================= CARD 3 ================= --}}
-                            <article
-                                class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0">
-
-                                <div class="h-[145px] w-full overflow-hidden rounded-lg">
-                                    <img src="{{ asset('image/transparan.png') }}" alt="Computer Laboratory"
-                                        class="h-full w-full object-cover">
-                                </div>
-
-                                <div class="mt-3 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/building-icon.png') }}" alt=""
-                                        class="h-[30px] w-[30px] object-contain">
-
-                                    <p class="text-[18px] font-semibold text-[#303030]">
-                                        Computer Laboratory
-                                    </p>
-
-                                </div>
-
-                                <div class="mt-1 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/location-icon.png') }}" alt=""
-                                        class="h-[28px] w-[28px] object-contain">
-
-                                    <p class="text-[15px] text-gray-500">
-                                        IELTS Centre
-                                    </p>
-
-                                </div>
-
-                            </article>
-
-
-                            {{-- ================= CARD 4 ================= --}}
-                            <article
-                                class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0">
-
-                                <div class="h-[145px] w-full overflow-hidden rounded-lg">
-                                    <img src="{{ asset('image/transparan.png') }}" alt="Computer Laboratory"
-                                        class="h-full w-full object-cover">
-                                </div>
-
-                                <div class="mt-3 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/building-icon.png') }}" alt=""
-                                        class="h-[30px] w-[30px] object-contain">
-
-                                    <p class="text-[18px] font-semibold text-[#303030]">
-                                        Computer Laboratory
-                                    </p>
-
-                                </div>
-
-                                <div class="mt-1 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/location-icon.png') }}" alt=""
-                                        class="h-[28px] w-[28px] object-contain">
-
-                                    <p class="text-[15px] text-gray-500">
-                                        IELTS Centre
-                                    </p>
-
-                                </div>
-
-                            </article>
-
-
-                            {{-- ================= CARD 5 ================= --}}
-                            <article
-                                class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0">
-
-                                <div class="h-[145px] w-full overflow-hidden rounded-lg">
-                                    <img src="{{ asset('image/transparan.png') }}" alt="Computer Laboratory"
-                                        class="h-full w-full object-cover">
-                                </div>
-
-                                <div class="mt-3 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/building-icon.png') }}" alt=""
-                                        class="h-[30px] w-[30px] object-contain">
-
-                                    <p class="text-[18px] font-semibold text-[#303030]">
-                                        Computer Laboratory
-                                    </p>
-
-                                </div>
-
-                                <div class="mt-1 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/location-icon.png') }}" alt=""
-                                        class="h-[28px] w-[28px] object-contain">
-
-                                    <p class="text-[15px] text-gray-500">
-                                        IELTS Centre
-                                    </p>
-
-                                </div>
-
-                            </article>
-
-
-                            {{-- ================= CARD 6 ================= --}}
-                            <article
-                                class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0">
-
-                                <div class="h-[145px] w-full overflow-hidden rounded-lg">
-                                    <img src="{{ asset('image/transparan.png') }}" alt="Computer Laboratory"
-                                        class="h-full w-full object-cover">
-                                </div>
-
-                                <div class="mt-3 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/building-icon.png') }}" alt=""
-                                        class="h-[30px] w-[30px] object-contain">
-
-                                    <p class="text-[18px] font-semibold text-[#303030]">
-                                        Computer Laboratory
-                                    </p>
-
-                                </div>
-
-                                <div class="mt-1 flex items-center gap-2">
-
-                                    <img src="{{ asset('image/location-icon.png') }}" alt=""
-                                        class="h-[28px] w-[28px] object-contain">
-
-                                    <p class="text-[15px] text-gray-500">
-                                        IELTS Centre
-                                    </p>
-
-                                </div>
-
-                            </article>
+                        <div
+                            id="facility-track"
+                            class="flex gap-6 transition-transform duration-500 ease-in-out"
+                        >
+
+                            @foreach ($featuredFacilities as $facility)
+
+                                <article
+                                    class="facility-card w-[calc((100%-72px)/4)] min-w-[calc((100%-72px)/4)] flex-shrink-0"
+                                >
+
+                                    {{-- IMAGE --}}
+                                    <div class="h-[145px] w-full overflow-hidden rounded-lg">
+                                        <img
+                                            src="{{ asset($facility['image']) }}"
+                                            alt="{{ $facility['name'] }}"
+                                            class="h-full w-full object-cover"
+                                        >
+                                    </div>
+
+                                    {{-- NAME --}}
+                                    <div class="mt-3 flex items-center gap-2">
+
+                                        <img
+                                            src="{{ asset('image/building-icon.png') }}"
+                                            alt=""
+                                            class="h-[30px] w-[30px] object-contain"
+                                        >
+
+                                        <p class="text-[18px] font-semibold text-[#303030]">
+                                            {{ $facility['name'] }}
+                                        </p>
+
+                                    </div>
+
+                                    {{-- LOCATION --}}
+                                    <div class="mt-1 flex items-center gap-2">
+
+                                        <img
+                                            src="{{ asset('image/location-icon.png') }}"
+                                            alt=""
+                                            class="h-[28px] w-[28px] object-contain"
+                                        >
+
+                                        <p class="text-[15px] text-gray-500">
+                                            {{ $facility['location'] }}
+                                        </p>
+
+                                    </div>
+
+                                </article>
+
+                            @endforeach
 
                         </div>
 

@@ -15,11 +15,38 @@ class HomeController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $featuredFacilities = Facility::query()
-            ->where('status', 'active')
-            ->latest()
-            ->take(8)
-            ->get();
+        $featuredFacilities = [
+            [
+                'name' => 'Computer Laboratory',
+                'location' => 'IELTS Centre',
+                'image' => 'image/transparan.png',
+            ],
+            [
+                'name' => 'Basketball Court',
+                'location' => 'Sports Building',
+                'image' => 'image/transparan.png',
+            ],
+            [
+                'name' => 'Auditorium',
+                'location' => 'Main Building',
+                'image' => 'image/transparan.png',
+            ],
+            [
+                'name' => 'Science Laboratory',
+                'location' => 'Laboratory Building',
+                'image' => 'image/transparan.png',
+            ],
+            [
+                'name' => 'Meeting Room',
+                'location' => 'Administration Building',
+                'image' => 'image/transparan.png',
+            ],
+            [
+                'name' => 'Music Room',
+                'location' => 'Arts Building',
+                'image' => 'image/transparan.png',
+            ],
+        ];
 
         return view('home.guest', [
             'featuredFacilities' => $featuredFacilities,
