@@ -53,8 +53,19 @@
             "
         >
 
-            {{-- ================= LOGIN FORM ================= --}}
-            <form class="flex flex-col w-full gap-[10px]">
+            {{-- FIX: pesan error validasi dari RegisterController@store (nama dipakai, password tidak cocok, dll) --}}
+            @if ($errors->any())
+                <div class="mb-[10px] rounded-[5px] border border-red-300 bg-red-50 px-[11px] py-[8px] text-[12px] text-red-600">
+                    <ul class="list-disc pl-[16px]">
+                        @foreach ($errors->all() as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('register.store') }}" class="flex flex-col w-full gap-[10px]">
+                @csrf
 
                 {{-- NAME --}}
                 <div class="relative">
@@ -77,8 +88,11 @@
 
                     <input
                         id="name"
-                        type="name"
+                        name="name"
+                        type="text"
+                        value="{{ old('name') }}"
                         placeholder="Enter your full name"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -118,8 +132,11 @@
 
                     <input
                         id="email"
+                        name="email"
                         type="email"
+                        value="{{ old('email') }}"
                         placeholder="Ex: name.000@ski.sch.id"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -160,9 +177,10 @@
 
                     <input
                         id="password"
-                        type="password"
                         name="password"
+                        type="password"
                         placeholder="Enter your password"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -171,7 +189,7 @@
                             border-[#8d8d8d]
                             bg-transparent
                             px-[11px]
-                            pr-[35px]
+                            pr-[40px]
                             text-[12px]
                             text-[#343434]
                             outline-none
@@ -180,10 +198,10 @@
                         "
                     >
 
-                    {{-- PASSWORD ICON --}}
                     <button
                         type="button"
-                        id="togglePassword"
+                        data-toggle-password="password"
+                        aria-label="Show or hide password"
                         class="
                             absolute
                             right-[8px]
@@ -194,18 +212,20 @@
                             p-0
                         "
                     >
-                        <span class="text-[12px] text-gray-400 ">
-                            <img id="passwordIcon" src="{{ asset('image/PW-icon.png') }}" class="h-[12px] w-[15px]" alt="Show password">
-                        </span>
+                        <img
+                            src="{{ asset('image/PW-icon.png') }}"
+                            alt="Show password"
+                            class="h-[15px] w-[17px] object-contain"
+                        >
                     </button>
 
                 </div>
 
-                {{-- PASSWORD --}}
+                {{-- CONFIRM PASSWORD --}}
                 <div class="relative mt-[16px]">
 
                     <label
-                        for="confirm-pw"
+                        for="password_confirmation"
                         class="
                             absolute
                             -top-[10px]
@@ -221,10 +241,11 @@
                     </label>
 
                     <input
-                        id="password"
+                        id="password_confirmation"
+                        name="password_confirmation"
                         type="password"
-                        name="password"
-                        placeholder="Enter your password"
+                        placeholder="Confirm your password"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -233,7 +254,7 @@
                             border-[#8d8d8d]
                             bg-transparent
                             px-[11px]
-                            pr-[35px]
+                            pr-[40px]
                             text-[12px]
                             text-[#343434]
                             outline-none
@@ -242,10 +263,10 @@
                         "
                     >
 
-                    {{-- PASSWORD ICON --}}
                     <button
                         type="button"
-                        id="togglePassword"
+                        data-toggle-password="password_confirmation"
+                        aria-label="Show or hide confirm password"
                         class="
                             absolute
                             right-[8px]
@@ -256,16 +277,18 @@
                             p-0
                         "
                     >
-                        <span class="text-[12px] text-gray-400 ">
-                            <img id="passwordIcon" src="{{ asset('image/PW-icon.png') }}" class="h-[12px] w-[15px]" alt="Show password">
-                        </span>
+                        <img
+                            src="{{ asset('image/PW-icon.png') }}"
+                            alt="Show password"
+                            class="h-[15px] w-[17px] object-contain"
+                        >
                     </button>
 
                 </div>
 
                 {{-- REGISTER BUTTON --}}
-                <a
-                    href="{{ route('login') }}"
+                <button
+                    type="submit"
                     class="
                         mt-[20px]
                         flex
@@ -279,15 +302,13 @@
                         bg-[#639178]
                         text-white
                         font-semibold
-                        text-[#639178]
                         transition
                         duration-200
-                        hover:bg-[#639178]
-                        hover:text-white
+                        hover:bg-[#527d66]
                     "
                 >
                     Register
-                </a>
+                </button>
 
 
                 {{-- ================= LOGIN ================= --}}
@@ -318,15 +339,16 @@
 
 </div>
 <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = document.getElementById(button.dataset.togglePassword);
 
-    togglePassword.addEventListener('click', function () {
-        if (password.type === 'password') {
-            password.type = 'text';
-        } else {
-            password.type = 'password';
-        }
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        });
     });
 </script>
 

@@ -53,8 +53,14 @@
             "
         >
 
-            {{-- ================= LOGIN FORM ================= --}}
-            <form class="flex flex-col w-full gap-[10px]">
+            @if ($errors->any())
+                <div class="mb-[10px] rounded-[5px] border border-red-300 bg-red-50 px-[11px] py-[8px] text-[12px] text-red-600">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login.store') }}" class="flex flex-col w-full gap-[10px]">
+                @csrf
 
                 {{-- EMAIL --}}
                 <div class="relative">
@@ -77,8 +83,11 @@
 
                     <input
                         id="email"
+                        name="email"
                         type="email"
+                        value="{{ old('email') }}"
                         placeholder="Ex: name.000@ski.sch.id"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -97,7 +106,7 @@
 
                 </div>
 
-
+       
                 {{-- PASSWORD --}}
                 <div class="relative mt-[16px]">
 
@@ -119,9 +128,10 @@
 
                     <input
                         id="password"
-                        type="password"
                         name="password"
+                        type="password"
                         placeholder="Enter your password"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -130,7 +140,7 @@
                             border-[#8d8d8d]
                             bg-transparent
                             px-[11px]
-                            pr-[35px]
+                            pr-[40px]
                             text-[12px]
                             text-[#343434]
                             outline-none
@@ -139,10 +149,10 @@
                         "
                     >
 
-                    {{-- PASSWORD ICON --}}
                     <button
                         type="button"
-                        id="togglePassword"
+                        data-toggle-password="password"
+                        aria-label="Show or hide password"
                         class="
                             absolute
                             right-[8px]
@@ -153,9 +163,11 @@
                             p-0
                         "
                     >
-                        <span class="text-[12px] text-gray-400 ">
-                            <img id="passwordIcon" src="{{ asset('image/PW-icon.png') }}" class="h-[13px] w-[15px]" alt="Show password">
-                        </span>
+                        <img
+                            src="{{ asset('image/PW-icon.png') }}"
+                            alt="Show password"
+                            class="h-[15px] w-[17px] object-contain"
+                        >
                     </button>
 
                 </div>
@@ -175,6 +187,7 @@
 
                         <input
                             type="checkbox"
+                            name="remember"
                             class="
                                 h-[17px]
                                 w-[17px]
@@ -206,11 +219,11 @@
 
 
                 {{-- LOGIN BUTTON --}}
-                <a
-                    href="#"
+                <button
+                    type="submit"
                     class="
-                        flex
                         mt-[20px]
+                        flex
                         h-[40px]
                         w-full
                         items-center
@@ -219,18 +232,15 @@
                         border-[2px]
                         border-[#639178]
                         bg-[#639178]
-                        text-white
                         font-semibold
-                        text-[#639178]
+                        text-white
                         transition
                         duration-200
-                        hover:bg-[#639178]
-                        hover:text-white
+                        hover:bg-[#527d66]
                     "
                 >
                     Log In
-                </a>
-
+                </button>
 
                 {{-- ================= OR ================= --}}
                 <div class="my-[13px] flex items-center gap-[8px]">
@@ -339,15 +349,16 @@
 
 </div>
 <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = document.getElementById(button.dataset.togglePassword);
 
-    togglePassword.addEventListener('click', function () {
-        if (password.type === 'password') {
-            password.type = 'text';
-        } else {
-            password.type = 'password';
-        }
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        });
     });
 </script>
 
