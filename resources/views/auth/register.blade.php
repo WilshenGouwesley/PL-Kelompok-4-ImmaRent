@@ -53,8 +53,18 @@
             "
         >
 
-            {{-- ================= LOGIN FORM ================= --}}
-            <form class="flex flex-col w-full gap-[10px]">
+            @if ($errors->any())
+                <div class="mb-[10px] rounded-[5px] border border-red-300 bg-red-50 px-[11px] py-[8px] text-[12px] text-red-600">
+                    <ul class="list-disc pl-[16px]">
+                        @foreach ($errors->all() as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('register.store') }}" class="flex flex-col w-full gap-[10px]">
+                @csrf
 
                 {{-- NAME --}}
                 <div class="relative">
@@ -75,10 +85,12 @@
                         Name
                     </label>
 
-                    <input
                         id="name"
-                        type="name"
+                        name="name"
+                        type="text"
+                        value="{{ old('name') }}"
                         placeholder="Enter your full name"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -118,8 +130,11 @@
 
                     <input
                         id="email"
+                        name="email"
                         type="email"
+                        value="{{ old('email') }}"
                         placeholder="Ex: name.000@ski.sch.id"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -160,8 +175,10 @@
 
                     <input
                         id="password"
+                        name="password"
                         type="password"
                         placeholder="Enter your password"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -179,9 +196,10 @@
                         "
                     >
 
-                    {{-- PASSWORD ICON --}}
                     <button
                         type="button"
+                        data-toggle-password="password"
+                        aria-label="Show or hide password"
                         class="
                             absolute
                             right-[8px]
@@ -190,20 +208,22 @@
                             border-0
                             bg-transparent
                             p-0
+                            text-gray-400
                         "
                     >
-                        <span class="text-[12px] text-gray-400 ">
-                            <img src="{{ asset('image/PW-icon.png') }}" class="h-[12px] w-[15px]">
-                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[13px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
                     </button>
 
                 </div>
 
-                {{-- PASSWORD --}}
+                {{-- CONFIRM PASSWORD --}}
                 <div class="relative mt-[16px]">
 
                     <label
-                        for="confirm-pw"
+                        for="password_confirmation"
                         class="
                             absolute
                             -top-[10px]
@@ -219,9 +239,11 @@
                     </label>
 
                     <input
-                        id="confirm-pw"
-                        type="confirm-pw"
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        type="password"
                         placeholder="Confirm your password"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -239,9 +261,10 @@
                         "
                     >
 
-                    {{-- PASSWORD ICON --}}
                     <button
                         type="button"
+                        data-toggle-password="password_confirmation"
+                        aria-label="Show or hide password"
                         class="
                             absolute
                             right-[8px]
@@ -250,18 +273,20 @@
                             border-0
                             bg-transparent
                             p-0
+                            text-gray-400
                         "
                     >
-                        <span class="text-[12px] text-gray-400 ">
-                            <img src="{{ asset('image/PW-icon.png') }}" class="h-[13px] w-[15px]">
-                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[13px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
                     </button>
 
                 </div>
 
                 {{-- REGISTER BUTTON --}}
-                <a
-                    href="{{ route('login') }}"
+                <button
+                    type="submit"
                     class="
                         mt-[20px]
                         flex
@@ -275,15 +300,13 @@
                         bg-[#639178]
                         text-white
                         font-semibold
-                        text-[#639178]
                         transition
                         duration-200
-                        hover:bg-[#639178]
-                        hover:text-white
+                        hover:bg-[#527d66]
                     "
                 >
                     Register
-                </a>
+                </button>
 
 
                 {{-- ================= LOGIN ================= --}}
@@ -313,5 +336,14 @@
     </main>
 
 </div>
+
+<script>
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = document.getElementById(button.dataset.togglePassword);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        });
+    });
+</script>
 
 @endsection

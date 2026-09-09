@@ -53,8 +53,14 @@
             "
         >
 
-            {{-- ================= LOGIN FORM ================= --}}
-            <form class="flex flex-col w-full gap-[10px]">
+            @if ($errors->any())
+                <div class="mb-[10px] rounded-[5px] border border-red-300 bg-red-50 px-[11px] py-[8px] text-[12px] text-red-600">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login.store') }}" class="flex flex-col w-full gap-[10px]">
+                @csrf
 
                 {{-- EMAIL --}}
                 <div class="relative">
@@ -77,8 +83,11 @@
 
                     <input
                         id="email"
+                        name="email"
                         type="email"
+                        value="{{ old('email') }}"
                         placeholder="Ex: name.000@ski.sch.id"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -119,8 +128,10 @@
 
                     <input
                         id="password"
+                        name="password"
                         type="password"
                         placeholder="Enter your password"
+                        required
                         class="
                             h-[41px]
                             w-full
@@ -138,9 +149,10 @@
                         "
                     >
 
-                    {{-- PASSWORD ICON --}}
                     <button
                         type="button"
+                        data-toggle-password="password"
+                        aria-label="Show or hide password"
                         class="
                             absolute
                             right-[8px]
@@ -149,11 +161,13 @@
                             border-0
                             bg-transparent
                             p-0
+                            text-gray-400
                         "
                     >
-                        <span class="text-[12px] text-gray-400 ">
-                            <img src="{{ asset('image/PW-icon.png') }}" class="h-[15px] w-[15px]">
-                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
                     </button>
 
                 </div>
@@ -173,6 +187,7 @@
 
                         <input
                             type="checkbox"
+                            name="remember"
                             class="
                                 h-[17px]
                                 w-[17px]
@@ -204,8 +219,8 @@
 
 
                 {{-- LOGIN BUTTON --}}
-                <a
-                    href="{{ route('register') }}"
+                <button
+                    type="submit"
                     class="
                         flex
                         mt-[20px]
@@ -219,15 +234,13 @@
                         bg-[#639178]
                         text-white
                         font-semibold
-                        text-[#639178]
                         transition
                         duration-200
-                        hover:bg-[#639178]
-                        hover:text-white
+                        hover:bg-[#527d66]
                     "
                 >
                     Log In
-                </a>
+                </button>
 
 
                 {{-- ================= OR ================= --}}
@@ -336,5 +349,14 @@
     </main>
 
 </div>
+
+<script>
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = document.getElementById(button.dataset.togglePassword);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        });
+    });
+</script>
 
 @endsection
