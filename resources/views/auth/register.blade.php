@@ -53,6 +53,7 @@
             "
         >
 
+            {{-- FIX: pesan error validasi dari RegisterController@store (nama dipakai, password tidak cocok, dll) --}}
             @if ($errors->any())
                 <div class="mb-[10px] rounded-[5px] border border-red-300 bg-red-50 px-[11px] py-[8px] text-[12px] text-red-600">
                     <ul class="list-disc pl-[16px]">
@@ -85,6 +86,7 @@
                         Name
                     </label>
 
+                    <input
                         id="name"
                         name="name"
                         type="text"
