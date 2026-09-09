@@ -3,19 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use App\Models\Facility;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    // Home (before login): menampilkan daftar fasilitas yang tersedia
-    public function index(Request $request)
-    {
-        if ($request->user()) {
-            return redirect()->route('dashboard');
-        }
 
-        $featuredFacilities = [
+    private function getFeaturedFacilities()
+    {
+        return [
             [
                 'name' => 'Computer Laboratory',
                 'location' => 'IELTS Centre',
@@ -47,13 +42,25 @@ class HomeController extends Controller
                 'image' => 'image/transparan.png',
             ],
         ];
+    }
+
+
+    // Home sebelum login
+    public function index(Request $request)
+    {
+        if ($request->user()) {
+            return redirect()->route('dashboard');
+        }
+
+        $featuredFacilities = $this->getFeaturedFacilities();
 
         return view('home.guest', [
             'featuredFacilities' => $featuredFacilities,
         ]);
     }
 
-    // Home (after login) / Dashboard: menampilkan ringkasan status peminjaman user
+
+    // Home setelah login / Dashboard
     public function dashboard(Request $request)
     {
         $user = $request->user();
@@ -79,10 +86,7 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $featuredFacilities = Facility::where('status', 'active')
-            ->latest()
-            ->take(3)
-            ->get();
+        $featuredFacilities = $this->getFeaturedFacilities();
 
         return view('home.dashboard', [
             'activeLoans' => $activeLoans,

@@ -19,9 +19,27 @@
     <!-- Content End -->
 
     <!-- Footer Start -->
-    @if (!request()->routeIs(['login', 'register']))
+    @if (request()->routeIs([
+    'home.guest',
+    'facilities.show',
+    ]))
         <div class="py-7">
             @include('layouts.partials.footer')
+        </div>
+    @endif
+    <!-- Footer End -->
+
+    <!-- Footer Start -->
+    @if (request()->routeIs([
+    'dashboard',
+    'facilities.index',
+    'bookings',
+    'history',
+    'nontifications',
+    'profile',
+    ]))
+        <div class="w-full">
+            @include('layouts.partials.footer2')
         </div>
     @endif
     <!-- Footer End -->
