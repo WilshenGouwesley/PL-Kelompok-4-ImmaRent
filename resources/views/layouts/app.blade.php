@@ -20,7 +20,7 @@
 
     <!-- Footer Start -->
     @if (request()->routeIs([
-    'home.guest',
+    'home',
     'facilities.show',
     ]))
         <div class="py-7">
@@ -33,7 +33,7 @@
     @if (request()->routeIs([
     'dashboard',
     'facilities.index',
-    'bookings',
+    'bookings.index',
     'history',
     'nontifications',
     'profile',
