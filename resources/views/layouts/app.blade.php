@@ -34,9 +34,9 @@
     'dashboard',
     'facilities.index',
     'bookings.index',
-    'history',
-    'nontifications',
-    'profile',
+    'history.index',
+    'notifications.index',
+    'profile.edit',
     ]))
         <div class="w-full">
             @include('layouts.partials.footer2')

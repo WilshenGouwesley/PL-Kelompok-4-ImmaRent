@@ -53,10 +53,6 @@ class BookingController extends Controller
         ]);
     }
 
-    /**
-     * Form booking, dibuka dari tombol "Book"
-     * pada kartu fasilitas.
-     */
     public function create(Facility $facility)
     {
         return view('bookings.create', [
