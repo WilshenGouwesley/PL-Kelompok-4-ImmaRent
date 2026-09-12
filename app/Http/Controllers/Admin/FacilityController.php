@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 
 class FacilityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $facilities = Facility::latest()->paginate(6);
+        $facilities = Facility::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('search') . '%');
+            })
+            ->latest()
+            ->paginate(6)
+            ->withQueryString();
 
         return view('admin.facilities.index', [
             'facilities' => $facilities,
@@ -22,7 +28,6 @@ class FacilityController extends Controller
         return view('admin.facilities.create');
     }
 
-    // Store new facility data from admin panel
     public function store(Request $request)
     {
         $validated = $this->validated($request);
@@ -35,7 +40,7 @@ class FacilityController extends Controller
 
         return redirect()
             ->route('admin.facilities.index')
-            ->with('status', 'Fasilitas berhasil ditambahkan.');
+            ->with('status', 'Facility added.');
     }
 
     public function edit(Facility $facility)
@@ -45,7 +50,6 @@ class FacilityController extends Controller
         ]);
     }
 
-    // Update facility data from admin panel
     public function update(Request $request, Facility $facility)
     {
         $validated = $this->validated($request);
@@ -58,15 +62,14 @@ class FacilityController extends Controller
 
         return redirect()
             ->route('admin.facilities.index')
-            ->with('status', 'Fasilitas berhasil diperbarui.');
+            ->with('status', 'Facility updated.');
     }
 
-    // Delete facility from admin panel
     public function destroy(Facility $facility)
     {
         $facility->delete();
 
-        return back()->with('status', 'Fasilitas dihapus.');
+        return back()->with('status', 'Facility removed.');
     }
 
     protected function validated(Request $request): array
