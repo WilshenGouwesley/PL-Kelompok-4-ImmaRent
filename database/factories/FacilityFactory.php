@@ -19,7 +19,7 @@ class FacilityFactory extends Factory
                 'LCD Projector',
                 'Black Marker',
                 'Science Laboratory',
-            ]) . ' ' . fake()->numberBetween(1, 9),
+            ]).' '.fake()->numberBetween(1, 9),
             'category' => fake()->randomElement($categories),
             'location' => fake()->randomElement($locations),
             'description' => fake()->sentence(12),
@@ -27,5 +27,11 @@ class FacilityFactory extends Factory
             'status' => 'active',
             'image' => null,
         ];
+    }
+
+    /** Fasilitas yang sudah dinonaktifkan (tidak muncul untuk siswa). */
+    public function retired(): static
+    {
+        return $this->state(fn () => ['status' => 'retired']);
     }
 }

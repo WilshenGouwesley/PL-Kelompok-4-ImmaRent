@@ -13,10 +13,14 @@
                 class="h-[40px] w-[40px] object-contain"
             >
 
-            {{-- titik notifikasi --}}
-            <span
-                class="absolute right-0 top-[9px] h-[6px] w-[6px] rounded-full bg-[#639178]"
-            ></span>
+            {{-- titik notifikasi: hanya muncul kalau ada notifikasi yang belum dibaca --}}
+            @auth
+                @if (auth()->user()->hasUnreadBookingNotifications())
+                    <span
+                        class="absolute right-0 top-[9px] h-[6px] w-[6px] rounded-full bg-[#639178]"
+                    ></span>
+                @endif
+            @endauth
 
     </a>
 

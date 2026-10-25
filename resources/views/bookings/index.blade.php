@@ -55,106 +55,15 @@
         {{-- ================= BODY ================= --}}
         <main class="w-full bg-[#343434] px-10 pb-10">
 
-            {{-- ================= HERO ================= --}}
-            <section class="
-                flex
-                w-full
-                items-start
-                justify-between
-                pt-[35px]
-            ">
-                <div class="flex h-[50px] w-full items-center rounded-lg bg-white px-[15px]">
+            @include('layouts.partials.filter-search')
 
-                    {{-- Tulisan Search di kiri --}}
-                    <span class="text-[14px] text-gray-400">
-                        Search...
-                    </span>
-
-                    {{-- Icon Search di kanan --}}
-                    <img
-                        src="{{ asset('image/search-icon.png') }}"
-                        alt="Search"
-                        class="ml-auto h-[22px] w-[22px] object-contain"
-                    >
-
-                </div>
-            </section>
-
-            {{-- ================= FILTER ================= --}}
-            <div class="flex w-full items-center justify-between pt-[15px]">
-
-                {{-- FILTER LEFT --}}
-                <div class="flex items-center gap-[15px]">
-
-                    <p class="text-[15px] font-reguler text-white">
-                        Filter by:
-                    </p>
-
-                    {{-- DATE --}}
-                    <div class="flex h-[26px] w-[82px] items-center justify-between rounded-full bg-[#f5f5f5] px-[14px]">
-                        <span class="text-[15px] text-[#343434]">
-                            Date
-                        </span>
-
-                        <img
-                            src="{{ asset('image/arrow-down-icon.png') }}"
-                            alt=""
-                            class="h-[15px] w-[15px] object-contain"
-                        >
-                    </div>
-
-                    {{-- CATEGORY --}}
-                    <div class="flex h-[26px] w-[110px] items-center justify-between rounded-full bg-[#f5f5f5] px-[14px]">
-                        <span class="text-[15px] text-[#343434]">
-                            Category
-                        </span>
-
-                        <img
-                            src="{{ asset('image/arrow-down-icon.png') }}"
-                            alt=""
-                            class="h-[15px] w-[15px] object-contain"
-                        >
-                    </div>
-
-                    {{-- STATUS --}}
-                    <div class="flex h-[26px] w-[92px] items-center justify-between rounded-full bg-[#f5f5f5] px-[14px]">
-                        <span class="text-[15px] text-[#343434]">
-                            Status
-                        </span>
-
-                        <img
-                            src="{{ asset('image/arrow-down-icon.png') }}"
-                            alt=""
-                            class="h-[15px] w-[15px] object-contain"
-                        >
-                    </div>
-
-                </div>
-
-
-                {{-- RESET FILTER --}}
-                <div class="flex h-[35px] w-[140px] items-center justify-center gap-[7px] rounded-sm bg-[#639178]">
-
-                    <img
-                        src="{{ asset('image/refresh-icon.png') }}" 
-                        class="h-[20px] w-[20px]"
-                    >
-
-                    </img>
-
-                    <span class="text-[15px] font-reguler text-white">
-                        Reset Filter
-                    </span>
-
-                </div>
-
-            </div>
+            @include('layouts.partials.filter-bar')
 
 
             {{-- ================= BOOKING CARDS ================= --}}
 <div class="mt-[20px] flex w-full flex-col gap-[15px]">
 
-    @foreach ($bookings as $booking)
+    @forelse ($bookings as $booking)
 
         <article class="flex min-h-[156px] w-full items-center rounded-lg bg-[#f5f5f5] px-[12px] py-[14px]">
 
@@ -264,6 +173,14 @@
                         </span>
                     </div>
 
+                @elseif ($booking['status'] === 'rejected')
+
+                    <div class="flex h-[29px] w-[130px] items-center justify-center rounded-full bg-[#F9B4B4]">
+                        <span class="text-[12px] font-semibold text-[#343434]">
+                            {{ $booking['status_text'] }}
+                        </span>
+                    </div>
+
                 @elseif ($booking['status'] === 'cancelled')
 
                     <div class="flex h-[29px] w-[130px] items-center justify-center rounded-full bg-[#DDDDD9]">
@@ -283,7 +200,7 @@
 
                 {{-- VIEW DETAILS --}}
                 <a
-                    href="#"
+                    href="{{ route('bookings.show', $booking['id']) }}"
                     class="mt-[15px] flex h-[30px] w-[130px] items-center justify-center rounded border border-[#639178] text-[12px] font-medium text-[#343434]"
                 >
                     View Details
@@ -293,110 +210,33 @@
 
         </article>
 
-    @endforeach
+    @empty
+
+        <p class="py-10 text-center text-[16px] text-white">
+            You have no bookings yet.
+            <a href="{{ route('facilities.index') }}" class="font-semibold underline">Browse facilities</a>
+        </p>
+
+    @endforelse
 
 </div>
+
+            {{-- ================= PAGINATION ================= --}}
+            @if ($bookings->lastPage() > 1)
+                <div class="mt-[15px] flex w-full items-center justify-center gap-[10px] pb-[15px]">
+                    @for ($page = 1; $page <= $bookings->lastPage(); $page++)
+                        <a
+                            href="{{ $bookings->url($page) }}"
+                            class="flex h-[32px] w-[32px] items-center justify-center rounded-md text-[13px] font-medium {{ $page === $bookings->currentPage() ? 'bg-[#639178] text-white' : 'bg-[#f5f5f5] text-[#555555]' }}"
+                        >
+                            {{ $page }}
+                        </a>
+                    @endfor
+                </div>
+            @endif
 
         </main>
 
 
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const track = document.getElementById('facility-track');
-            const prevButton = document.getElementById('facility-prev');
-            const nextButton = document.getElementById('facility-next');
-
-            const cards = track.querySelectorAll('.facility-card');
-
-            let currentIndex = 0;
-
-            const visibleCards = 4;
-            const gap = 24;
-
-
-            function updateCarousel() {
-
-                const cardWidth = cards[0].offsetWidth;
-
-                const moveDistance = cardWidth + gap;
-
-                track.style.transform =
-                    `translateX(-${currentIndex * moveDistance}px)`;
-
-
-                // Tombol kiri
-                if (currentIndex === 0) {
-
-                    prevButton.style.opacity = '0.5';
-                    prevButton.style.pointerEvents = 'none';
-
-                } else {
-
-                    prevButton.style.opacity = '1';
-                    prevButton.style.pointerEvents = 'auto';
-
-                }
-
-
-                // Tombol kanan
-                if (currentIndex >= cards.length - visibleCards) {
-
-                    nextButton.style.opacity = '0.5';
-                    nextButton.style.pointerEvents = 'none';
-
-                } else {
-
-                    nextButton.style.opacity = '1';
-                    nextButton.style.pointerEvents = 'auto';
-
-                }
-
-            }
-
-
-            // ================= NEXT =================
-
-            nextButton.addEventListener('click', function () {
-
-                if (currentIndex < cards.length - visibleCards) {
-
-                    currentIndex++;
-
-                    updateCarousel();
-
-                }
-
-            });
-
-
-            // ================= PREVIOUS =================
-
-            prevButton.addEventListener('click', function () {
-
-                if (currentIndex > 0) {
-
-                    currentIndex--;
-
-                    updateCarousel();
-
-                }
-
-            });
-
-
-            // Update ketika ukuran layar berubah
-
-            window.addEventListener('resize', function () {
-
-                updateCarousel();
-
-            });
-
-
-            updateCarousel();
-
-        });
-    </script>
 @endsection

@@ -3,23 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     // Admin: manage student & staff accounts
     public function index(Request $request)
     {
-        $users = User::where('role', 'student')
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $term = $request->input('search');
-                $query->where(fn ($q) => $q->where('name', 'like', "%{$term}%")
-                    ->orWhere('email', 'like', "%{$term}%"));
-            })
+        $users = User::query()
+            ->students()
+            ->search($request->input('search'))
             ->latest()
-            ->paginate(7);
+            ->paginate(7)
+            ->withQueryString();
 
         return view('admin.users.index', [
             'users' => $users,
@@ -34,15 +32,9 @@ class UserController extends Controller
     }
 
     // Update user data (name, email, class) from admin panel
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
-            'class' => ['nullable', 'string', 'max:50'],
-        ]);
-
-        $user->update($validated);
+        $user->update($request->validated());
 
         return redirect()
             ->route('admin.users.index')
@@ -51,10 +43,13 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        abort_if($user->role === 'admin', 403, 'Akun admin tidak dapat dihapus dari sini.');
+        abort_if($user->isAdmin(), 403, 'Akun admin tidak dapat dihapus dari sini.');
 
         $user->delete();
 
-        return back()->with('status', 'Pengguna dihapus.');
+        // redirect eksplisit: back() akan mengarah ke halaman edit user yang baru dihapus (404)
+        return redirect()
+            ->route('admin.users.index')
+            ->with('status', 'Pengguna dihapus.');
     }
 }

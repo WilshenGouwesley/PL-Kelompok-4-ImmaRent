@@ -83,7 +83,7 @@
             {{-- ================= NOTIFICATION CARDS ================= --}}
             <div class="mt-[20px] flex w-full flex-col gap-[15px] pt-[30px]">
 
-                @foreach ($notifications as $notification)
+                @forelse ($notifications as $notification)
 
                     <article class="flex min-h-[156px] w-full items-center rounded-lg bg-[#f5f5f5] px-[12px] py-[14px]">
 
@@ -101,8 +101,12 @@
                         <div class="ml-[28px] flex flex-1 flex-col">
 
                             {{-- FACILITY NAME --}}
-                            <h3 class="text-[18px] font-semibold text-[#202020]">
+                            <h3 class="flex items-center gap-2 text-[18px] font-semibold text-[#202020]">
                                 {{ $notification['facility_name'] }}
+
+                                @if ($notification['unread'])
+                                    <span class="h-[8px] w-[8px] rounded-full bg-[#639178]" title="New"></span>
+                                @endif
                             </h3>
 
 
@@ -209,129 +213,38 @@
 
                     </article>
 
-                @endforeach
+                @empty
+
+                    <p class="py-10 text-center text-[16px] text-white">
+                        You have no notifications yet.
+                    </p>
+
+                @endforelse
 
             </div>
 
             {{-- ================= LOAD MORE ================= --}}
-            <div class="mt-[15px] w-full">
+            @if ($hasMore)
+                <div class="mt-[15px] w-full">
 
-                <button
-                    type="button"
-                    class="flex h-[45px] w-full items-center justify-center gap-[7px] rounded-md border border-[#cfcfcf] bg-[#f5f5f5] text-[20px] font-bold text-[#202020]"
-                >
-                    <span>Load More</span>
-
-                    <img
-                        src="{{ asset('image/arrow-down-icon.png') }}"
-                        alt=""
-                        class="h-[16px] w-[16px] object-contain"
+                    <a
+                        href="{{ route('notifications.index', ['limit' => $nextLimit]) }}"
+                        class="flex h-[45px] w-full items-center justify-center gap-[7px] rounded-md border border-[#cfcfcf] bg-[#f5f5f5] text-[20px] font-bold text-[#202020]"
                     >
-                </button>
+                        <span>Load More</span>
 
-            </div>
+                        <img
+                            src="{{ asset('image/arrow-down-icon.png') }}"
+                            alt=""
+                            class="h-[16px] w-[16px] object-contain"
+                        >
+                    </a>
 
+                </div>
+            @endif
 
         </main>
 
 
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const track = document.getElementById('facility-track');
-            const prevButton = document.getElementById('facility-prev');
-            const nextButton = document.getElementById('facility-next');
-
-            const cards = track.querySelectorAll('.facility-card');
-
-            let currentIndex = 0;
-
-            const visibleCards = 4;
-            const gap = 24;
-
-
-            function updateCarousel() {
-
-                const cardWidth = cards[0].offsetWidth;
-
-                const moveDistance = cardWidth + gap;
-
-                track.style.transform =
-                    `translateX(-${currentIndex * moveDistance}px)`;
-
-
-                // Tombol kiri
-                if (currentIndex === 0) {
-
-                    prevButton.style.opacity = '0.5';
-                    prevButton.style.pointerEvents = 'none';
-
-                } else {
-
-                    prevButton.style.opacity = '1';
-                    prevButton.style.pointerEvents = 'auto';
-
-                }
-
-
-                // Tombol kanan
-                if (currentIndex >= cards.length - visibleCards) {
-
-                    nextButton.style.opacity = '0.5';
-                    nextButton.style.pointerEvents = 'none';
-
-                } else {
-
-                    nextButton.style.opacity = '1';
-                    nextButton.style.pointerEvents = 'auto';
-
-                }
-
-            }
-
-
-            // ================= NEXT =================
-
-            nextButton.addEventListener('click', function () {
-
-                if (currentIndex < cards.length - visibleCards) {
-
-                    currentIndex++;
-
-                    updateCarousel();
-
-                }
-
-            });
-
-
-            // ================= PREVIOUS =================
-
-            prevButton.addEventListener('click', function () {
-
-                if (currentIndex > 0) {
-
-                    currentIndex--;
-
-                    updateCarousel();
-
-                }
-
-            });
-
-
-            // Update ketika ukuran layar berubah
-
-            window.addEventListener('resize', function () {
-
-                updateCarousel();
-
-            });
-
-
-            updateCarousel();
-
-        });
-    </script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,31 +14,14 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Login berdasarkan email & password, dengan opsi
-     * "Keep me logged in" pada wireframe.
-     */
-    public function store(Request $request)
+    public function store(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        $remember = $request->boolean('remember');
-
-        if (! Auth::attempt($credentials, $remember)) {
-            return back()
-                ->withInput($request->only('email'))
-                ->withErrors(['email' => 'Email atau password yang Anda masukkan salah.']);
-        }
+        $request->authenticate();
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
-
         return redirect()->intended(
-            $user->role === 'admin' ? route('admin.dashboard') : route('dashboard')
+            $request->user()->isAdmin() ? route('admin.dashboard') : route('dashboard')
         );
     }
 

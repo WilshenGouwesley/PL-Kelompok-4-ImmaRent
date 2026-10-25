@@ -73,7 +73,7 @@
                             leading-[1.1]
                             text-white
                         ">
-                        Hello, Justin!
+                        Hello {{ Auth::user()->name }}!
                     </h1>
 
 

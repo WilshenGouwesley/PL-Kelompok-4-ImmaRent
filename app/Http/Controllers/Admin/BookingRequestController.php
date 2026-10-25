@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RejectBookingRequest;
 use App\Models\Booking;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -12,56 +13,55 @@ class BookingRequestController extends Controller
     public function index(Request $request)
     {
         $bookings = Booking::with(['facility', 'user'])
-            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->input('status')))
+            ->filter($request->only('status'))
             ->latest()
-            ->paginate(5);
+            ->paginate(5)
+            ->withQueryString();
 
         return view('admin.bookings.index', [
             'bookings' => $bookings,
         ]);
     }
 
-    // Tombol centang hijau pada wireframe: menyetujui permintaan booking.
     public function approve(Request $request, Booking $booking)
     {
+        if ($booking->status !== 'pending') {
+            return $this->alreadyReviewed();
+        }
+
         $booking->update([
             'status' => 'approved',
             'approved_at' => now(),
             'approved_by' => $request->user()->id,
         ]);
 
-        Notification::create([
-            'user_id' => $booking->user_id,
-            'booking_id' => $booking->id,
-            'title' => $booking->facility->name,
-            'message' => 'Permintaan booking Anda telah disetujui.',
-            'type' => 'approved',
-        ]);
+        Notification::forBooking($booking, 'approved', 'Permintaan booking Anda telah disetujui.');
 
         return back()->with('status', 'Booking disetujui.');
     }
 
-    // Tombol silang merah pada wireframe: menolak permintaan booking.
-    public function reject(Request $request, Booking $booking)
+    public function reject(RejectBookingRequest $request, Booking $booking)
     {
-        $validated = $request->validate([
-            'rejection_reason' => ['nullable', 'string', 'max:255'],
-        ]);
+        if ($booking->status !== 'pending') {
+            return $this->alreadyReviewed();
+        }
 
         $booking->update([
             'status' => 'rejected',
             'rejected_at' => now(),
-            'rejection_reason' => $validated['rejection_reason'] ?? null,
+            'rejection_reason' => $request->validated('rejection_reason'),
         ]);
 
-        Notification::create([
-            'user_id' => $booking->user_id,
-            'booking_id' => $booking->id,
-            'title' => $booking->facility->name,
-            'message' => 'Permintaan booking Anda ditolak.',
-            'type' => 'rejected',
-        ]);
+        Notification::forBooking($booking, 'rejected', 'Permintaan booking Anda ditolak.');
 
         return back()->with('status', 'Booking ditolak.');
+    }
+
+    /** Booking yang sudah diproses/dibatalkan tidak boleh disetujui atau ditolak lagi. */
+    protected function alreadyReviewed()
+    {
+        return back()->withErrors([
+            'status' => 'Only pending requests can be approved or rejected.',
+        ]);
     }
 }

@@ -23,6 +23,12 @@
                     </div>
                 @endif
 
+                @if ($errors->any())
+                    <div class="mb-4 rounded-md border border-red-400/50 bg-red-400/10 px-4 py-3 text-[14px] text-red-300">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+
                 <div class="flex items-start justify-between">
                     <div>
                         <h1 class="text-[28px] font-bold text-white">Booking Requests</h1>

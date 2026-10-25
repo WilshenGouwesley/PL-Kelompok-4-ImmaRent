@@ -33,10 +33,11 @@
     @if (request()->routeIs([
     'dashboard',
     'facilities.index',
-    'bookings.index',
+    'bookings.*',
     'history.index',
     'notifications.index',
     'profile.edit',
+    'admin.*',
     ]))
         <div class="w-full">
             @include('layouts.partials.footer2')

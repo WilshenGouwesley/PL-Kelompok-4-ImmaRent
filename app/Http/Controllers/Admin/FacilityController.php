@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaveFacilityRequest;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,7 @@ class FacilityController extends Controller
     public function index(Request $request)
     {
         $facilities = Facility::query()
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->input('search') . '%');
-            })
+            ->filter($request->only('search'))
             ->latest()
             ->paginate(6)
             ->withQueryString();
@@ -28,9 +27,9 @@ class FacilityController extends Controller
         return view('admin.facilities.create');
     }
 
-    public function store(Request $request)
+    public function store(SaveFacilityRequest $request)
     {
-        $validated = $this->validated($request);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('facilities', 'public');
@@ -50,9 +49,9 @@ class FacilityController extends Controller
         ]);
     }
 
-    public function update(Request $request, Facility $facility)
+    public function update(SaveFacilityRequest $request, Facility $facility)
     {
-        $validated = $this->validated($request);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('facilities', 'public');
@@ -70,18 +69,5 @@ class FacilityController extends Controller
         $facility->delete();
 
         return back()->with('status', 'Facility removed.');
-    }
-
-    protected function validated(Request $request): array
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'max:100'],
-            'location' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'capacity' => ['nullable', 'integer', 'min:1'],
-            'status' => ['required', 'in:active,retired'],
-            'image' => ['nullable', 'image', 'max:2048'],
-        ]);
     }
 }
