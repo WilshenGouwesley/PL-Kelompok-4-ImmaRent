@@ -75,6 +75,28 @@ class Booking extends Model
     }
 
     /**
+     * Peminjaman aktif: sudah disetujui dan BELUM selesai (akan datang atau sedang berlangsung).
+     * Memakai zona waktu aplikasi (Asia/Pontianak), karena jam booking adalah jam dinding lokal.
+     */
+    public function scopeActiveLoans(Builder $query): Builder
+    {
+        $today = now()->toDateString();
+        $time = now()->format('H:i:s');
+
+        return $query->where('status', 'approved')->where(function (Builder $q) use ($today, $time) {
+            $q->whereDate('booking_date', '>', $today)
+                ->orWhere(fn (Builder $t) => $t->whereDate('booking_date', $today)->where('end_time', '>', $time));
+        });
+    }
+
+    /** Booking yang disetujui pada bulan berjalan (dihitung dari waktu persetujuan). */
+    public function scopeApprovedThisMonth(Builder $query): Builder
+    {
+        return $query->where('status', 'approved')
+            ->whereBetween('approved_at', [now()->startOfMonth(), now()->endOfMonth()]);
+    }
+
+    /**
      * Filter gabungan untuk halaman Bookings, History, dan Booking Requests (admin):
      * ['date' => Y-m-d, 'category' => ..., 'status' => ..., 'search' => nama fasilitas].
      * Kunci yang kosong/tidak ada diabaikan.

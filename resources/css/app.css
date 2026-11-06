@@ -9,3 +9,173 @@
     --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/*
+|--------------------------------------------------------------------------
+| Animasi
+|--------------------------------------------------------------------------
+| Dipakai sebagai utility Tailwind: animate-fade-up, animate-slide-down, dst.
+| Semua animasi masuk memakai fill-mode "backwards": setelah selesai elemen
+| kembali ke gaya normalnya, jadi efek hover tidak tertimpa.
+*/
+@theme static {
+    --animate-fade-in: fade-in 0.6s ease-out backwards;
+    --animate-fade-up: fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    --animate-slide-down: slide-down 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    --animate-pop-in: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    --animate-bell: bell-ring 1.4s ease-in-out 0.8s 2;
+    --animate-soft-ping: soft-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    --animate-float: float 6s ease-in-out infinite;
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fade-up {
+        from { opacity: 0; translate: 0 22px; }
+        to { opacity: 1; translate: 0 0; }
+    }
+
+    @keyframes slide-down {
+        from { opacity: 0; translate: 0 -14px; }
+        to { opacity: 1; translate: 0 0; }
+    }
+
+    @keyframes pop-in {
+        from { opacity: 0; scale: 0.85; }
+        to { opacity: 1; scale: 1; }
+    }
+
+    @keyframes bell-ring {
+        0%, 60%, 100% { rotate: 0deg; }
+        10% { rotate: 14deg; }
+        20% { rotate: -12deg; }
+        30% { rotate: 9deg; }
+        40% { rotate: -6deg; }
+        50% { rotate: 3deg; }
+    }
+
+    @keyframes soft-ping {
+        75%, 100% { scale: 2.6; opacity: 0; }
+    }
+
+    @keyframes float {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -10px; }
+    }
+}
+
+@keyframes spinner {
+    to { rotate: 360deg; }
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* perubahan warna/bayangan/posisi pada elemen interaktif selalu halus */
+    a, button, input, select, textarea {
+        transition-property: color, background-color, border-color, box-shadow, opacity, translate, scale, rotate, filter;
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
+    }
+
+    /* umpan balik saat ditekan */
+    button:not(:disabled):active,
+    a[class*="bg-[#639178]"]:active {
+        scale: 0.97;
+    }
+
+    /* cincin fokus lembut untuk keyboard (kolom form banyak yang memakai outline-none) */
+    input:focus-visible, select:focus-visible, textarea:focus-visible {
+        box-shadow: 0 0 0 3px rgb(99 145 120 / 0.35);
+    }
+
+    /* panel utama (tab + isi) muncul halus di setiap halaman */
+    main {
+        animation: var(--animate-fade-in);
+    }
+}
+
+@layer components {
+    /* ---------- kartu: masuk berurutan, terangkat saat disorot ---------- */
+    main article {
+        animation: var(--animate-fade-up);
+        transition: translate 0.25s ease, box-shadow 0.25s ease;
+    }
+    main article:nth-child(1)  { animation-delay: 0.05s; }
+    main article:nth-child(2)  { animation-delay: 0.12s; }
+    main article:nth-child(3)  { animation-delay: 0.19s; }
+    main article:nth-child(4)  { animation-delay: 0.26s; }
+    main article:nth-child(5)  { animation-delay: 0.33s; }
+    main article:nth-child(6)  { animation-delay: 0.40s; }
+    main article:nth-child(7)  { animation-delay: 0.47s; }
+    main article:nth-child(8)  { animation-delay: 0.54s; }
+    main article:nth-child(9)  { animation-delay: 0.61s; }
+    main article:nth-child(10) { animation-delay: 0.68s; }
+    main article:nth-child(n+11) { animation-delay: 0.75s; }
+
+    /* carousel memotong konten (overflow-hidden), jadi tidak diangkat; cukup foto yang membesar */
+    main article:not(.facility-card):hover {
+        translate: 0 -4px;
+        box-shadow: 0 16px 30px -14px rgb(0 0 0 / 0.45);
+    }
+
+    /* foto di dalam kartu membesar pelan saat kartu disorot */
+    main article .overflow-hidden > img {
+        transition: scale 0.5s ease;
+    }
+    main article:hover .overflow-hidden > img {
+        scale: 1.06;
+    }
+
+    /* baris tabel */
+    main tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    main tbody tr:hover {
+        background-color: rgb(99 145 120 / 0.08);
+    }
+
+    /* ---------- muncul saat di-scroll (diatur app.js; hanya aktif jika JS jalan) ---------- */
+    .js [data-reveal] {
+        opacity: 0;
+        translate: 0 28px;
+        transition: opacity 0.8s ease, translate 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .js [data-reveal].is-visible {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+    /* ---------- tombol kirim: indikator memproses ---------- */
+    button[data-loading] {
+        pointer-events: none;
+        opacity: 0.85;
+    }
+    button[data-loading]::after {
+        content: '';
+        display: inline-block;
+        flex: none;
+        width: 1em;
+        height: 1em;
+        margin-left: 0.6em;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 9999px;
+        animation: spinner 0.7s linear infinite;
+    }
+}
+
+/* hormati pengguna yang mematikan animasi di perangkatnya */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

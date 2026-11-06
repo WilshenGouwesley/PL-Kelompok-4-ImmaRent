@@ -37,7 +37,7 @@
             </a>
 
             @if (session('status'))
-                <div class="mb-4 rounded-md border border-[#639178]/50 bg-[#639178]/10 px-4 py-3 text-[14px] text-[#9fd6b7]">
+                <div data-flash class="animate-slide-down mb-4 rounded-md border border-[#639178]/50 bg-[#639178]/10 px-4 py-3 text-[14px] text-[#9fd6b7]">
                     {{ session('status') }}
                 </div>
             @endif

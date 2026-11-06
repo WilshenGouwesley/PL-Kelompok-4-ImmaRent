@@ -14,32 +14,32 @@ class HomeController extends Controller
             [
                 'name' => 'Computer Laboratory',
                 'location' => 'IELTS Centre',
-                'image' => 'image/transparan.png',
+                'image' => 'image/computerlaboratory.png',
             ],
             [
                 'name' => 'Basketball Court',
                 'location' => 'Sports Building',
-                'image' => 'image/transparan.png',
+                'image' => 'image/basketballcourt.png',
             ],
             [
                 'name' => 'Auditorium',
                 'location' => 'Main Building',
-                'image' => 'image/transparan.png',
+                'image' => 'image/auditorium.png',
             ],
             [
                 'name' => 'Science Laboratory',
                 'location' => 'Laboratory Building',
-                'image' => 'image/transparan.png',
+                'image' => 'image/science_lab.png',
             ],
             [
                 'name' => 'Meeting Room',
                 'location' => 'Administration Building',
-                'image' => 'image/transparan.png',
+                'image' => 'image/meeting_room.png',
             ],
             [
                 'name' => 'Music Room',
                 'location' => 'Arts Building',
-                'image' => 'image/transparan.png',
+                'image' => 'image/music_studio.png',
             ],
         ];
     }
@@ -65,20 +65,11 @@ class HomeController extends Controller
     {
         $user = $request->user();
 
-        $activeLoans = Booking::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->whereDate('booking_date', '>=', now()->toDateString())
-            ->count();
-
-        $approvedThisMonth = Booking::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->whereMonth('approved_at', now()->month)
-            ->whereYear('approved_at', now()->year)
-            ->count();
-
-        $awaitingConfirmation = Booking::where('user_id', $user->id)
-            ->where('status', 'pending')
-            ->count();
+        // Tiga angka di kartu ringkasan Home. Definisinya ada di scope model Booking,
+        // jadi angkanya selalu sama dengan yang tampil di halaman Bookings & History.
+        $activeLoans = Booking::ownedBy($user->id)->activeLoans()->count();
+        $approvedThisMonth = Booking::ownedBy($user->id)->approvedThisMonth()->count();
+        $awaitingConfirmation = Booking::ownedBy($user->id)->pending()->count();
 
         $latestLoans = Booking::with('facility')
             ->where('user_id', $user->id)

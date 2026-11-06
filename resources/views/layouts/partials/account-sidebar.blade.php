@@ -8,7 +8,7 @@
     <div class="flex flex-col items-center">
         <div class="h-[190px] w-[190px] overflow-hidden rounded-full bg-[#f5f5f5]/10">
             <img
-                src="{{ $accountUser->avatar ? asset('storage/' . $accountUser->avatar) : asset('image/transparan.png') }}"
+                src="{{ $accountUser->avatar_url ?? asset('image/transparan.png') }}"
                 alt="{{ $accountUser->name }}"
                 class="h-full w-full object-cover"
             >

@@ -20,7 +20,7 @@
                 <h1 class="text-[28px] font-bold text-white">Personal Information</h1>
 
                 @if (session('status'))
-                    <div class="mt-4 rounded-md border border-[#639178]/50 bg-[#639178]/10 px-4 py-3 text-[14px] text-[#9fd6b7]">
+                    <div data-flash class="animate-slide-down mt-4 rounded-md border border-[#639178]/50 bg-[#639178]/10 px-4 py-3 text-[14px] text-[#9fd6b7]">
                         {{ session('status') }}
                     </div>
                 @endif
@@ -38,6 +38,42 @@
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 flex flex-col gap-6">
                     @csrf
                     @method('PUT')
+
+                    {{-- ================= FOTO PROFIL ================= --}}
+                    <div class="flex items-center gap-5">
+
+                        <div class="h-[96px] w-[96px] shrink-0 overflow-hidden rounded-full bg-[#f5f5f5]/10 ring-2 ring-white/10">
+                            <img
+                                id="avatar-preview"
+                                src="{{ $user->avatar_url ?? asset('image/transparan.png') }}"
+                                alt="{{ $user->name }}"
+                                class="h-full w-full object-cover"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="avatar" class="mb-1 block text-[16px] font-medium text-white">Profile Photo</label>
+
+                            <input
+                                id="avatar"
+                                name="avatar"
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp"
+                                class="block text-[14px] text-white/80 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-[#639178] file:px-4 file:py-2 file:text-[14px] file:font-semibold file:text-white hover:file:bg-[#527d66]"
+                            >
+
+                            <p class="mt-1 text-[13px] text-white/50">JPG, PNG, or WEBP. Max 2 MB.</p>
+                            <p id="avatar-error" class="mt-1 text-[13px] text-red-300">@error('avatar'){{ $message }}@enderror</p>
+
+                            @if ($user->avatar)
+                                <label class="mt-1 inline-flex cursor-pointer items-center gap-2 text-[14px] text-white/70">
+                                    <input id="remove_avatar" name="remove_avatar" type="checkbox" value="1" class="h-[16px] w-[16px] accent-[#639178]">
+                                    Remove current photo
+                                </label>
+                            @endif
+                        </div>
+
+                    </div>
 
                     <div>
                         <label for="name" class="mb-1 block text-[16px] font-medium text-white">Full Name</label>
@@ -125,6 +161,43 @@
             </section>
 
         </main>
+
+        <script>
+            (function () {
+                const input = document.getElementById('avatar');
+                const preview = document.getElementById('avatar-preview');
+                const remove = document.getElementById('remove_avatar');
+                const error = document.getElementById('avatar-error');
+                const placeholder = @json(asset('image/transparan.png'));
+                const original = preview.src;
+                const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+
+                function reset(message) {
+                    input.value = '';
+                    preview.src = original;
+                    error.textContent = message;
+                }
+
+                input.addEventListener('change', function () {
+                    error.textContent = '';
+                    const file = input.files[0];
+
+                    if (! file) { preview.src = original; return; }
+                    if (! allowed.includes(file.type)) { reset('Please choose a JPG, PNG, or WEBP image.'); return; }
+                    if (file.size > 2 * 1024 * 1024) { reset('The photo must not be larger than 2 MB.'); return; }
+
+                    preview.src = URL.createObjectURL(file);   // pratinjau sebelum disimpan
+                    if (remove) { remove.checked = false; }
+                });
+
+                if (remove) {
+                    remove.addEventListener('change', function () {
+                        if (remove.checked) { input.value = ''; error.textContent = ''; preview.src = placeholder; }
+                        else { preview.src = original; }
+                    });
+                }
+            })();
+        </script>
 
     </div>
 

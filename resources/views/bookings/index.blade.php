@@ -9,42 +9,7 @@
         {{-- ================= HEADER + NAVIGATION ================= --}}
         <div class="flex w-full items-end justify-between pt-4">
 
-            {{-- NAVIGATION --}}
-            <nav class="flex items-end gap-1">
-
-                {{-- HOME --}}
-                <a href="{{ route('home') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Home
-                </a>
-
-
-                {{-- FACILITIES --}}
-                <a href="{{ route('facilities.index') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Facilities
-                </a>
-
-
-                {{-- BOOKINGS --}}
-                <a href="{{ route('bookings.index') }}"
-                    class="flex h-[84px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Bookings
-                </a>
-
-                {{-- HISTORY --}}
-                <a href="{{ route('history.index') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    History
-                </a>    
-
-                {{-- PROFILE --}}
-                <a href="{{ route('profile.edit') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Profile
-                </a>
-
-            </nav>
+            @include('layouts.partials.navbar', ['tabBg' => 'bg-[#343434]'])
 
             {{-- HEADER --}}
             @include('layouts.partials.header')

@@ -10,7 +10,7 @@
     <main class="flex min-h-screen flex-col items-center">
 
         {{-- ================= TITLE ================= --}}
-        <section class="pt-[85px] text-center">
+        <section class="animate-fade-up pt-[85px] text-center">
 
             <h1
                 class="
@@ -40,7 +40,7 @@
         {{-- ================= PHONE / LOGIN CONTAINER ================= --}}
         <section
             class="
-                relative
+                animate-fade-up [animation-delay:150ms] relative
                 mt-[37px]
                 w-[400px]
                 min-h-[600px]

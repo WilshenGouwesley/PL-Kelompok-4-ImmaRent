@@ -12,7 +12,20 @@ class BookingSeeder extends Seeder
     private const TOTAL = 40;
 
     /** Akun demo selalu mendapat satu contoh dari tiap status, supaya semua badge terlihat. */
-    private const DEMO_PLAN = ['pending', 'approved', 'approved', 'rejected', 'cancelled', 'pending', 'approved', 'cancelled'];
+    /**
+     * [status, selisih hari dari hari ini]. Tanggalnya sengaja pasti, supaya kartu di Home
+     * akun demo selalu berisi: 2 peminjaman aktif, 2 menunggu persetujuan, dst.
+     */
+    private const DEMO_PLAN = [
+        ['pending', 2],
+        ['approved', 3],
+        ['approved', 8],
+        ['rejected', -4],
+        ['cancelled', 5],
+        ['pending', 12],
+        ['approved', -6],
+        ['cancelled', -10],
+    ];
 
     public function run(): void
     {
@@ -38,12 +51,16 @@ class BookingSeeder extends Seeder
 
             $isDemo = $created < count(self::DEMO_PLAN);
             $status = $isDemo
-                ? self::DEMO_PLAN[$created]
+                ? self::DEMO_PLAN[$created][0]
                 : fake()->randomElement(['pending', 'approved', 'approved', 'approved', 'rejected', 'cancelled']);
 
             $factory = Booking::factory()
                 ->for($isDemo ? $demo : $students->random(), 'user')
                 ->for($facilities->random(), 'facility');
+
+            if ($isDemo) {
+                $factory = $factory->onDate(now()->addDays(self::DEMO_PLAN[$created][1]));
+            }
 
             $booking = match ($status) {
                 'approved' => $factory->approved($adminId)->make(),

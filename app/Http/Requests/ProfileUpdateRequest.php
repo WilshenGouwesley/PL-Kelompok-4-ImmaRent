@@ -21,7 +21,8 @@ class ProfileUpdateRequest extends FormRequest
             'class' => ['nullable', 'string', 'max:50'],
             'phone_number' => ['nullable', 'string', 'max:20'],
             'date_of_birth' => ['nullable', 'date', 'before:today'],
-            'avatar' => ['nullable', 'image', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'remove_avatar' => ['nullable', 'boolean'],
         ];
     }
 
@@ -30,6 +31,7 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'phone_number' => 'phone number',
             'date_of_birth' => 'date of birth',
+            'avatar' => 'profile photo',
         ];
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -36,6 +38,16 @@ class User extends Authenticatable
             'date_of_birth' => 'date',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // Hapus file foto dari storage saat akun dihapus, supaya tidak ada file yatim.
+        static::deleting(function (User $user) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+        });
     }
 
     // ================= RELATIONSHIPS =================
@@ -79,6 +91,15 @@ class User extends Authenticatable
     }
 
     // ================= HELPERS =================
+
+    /**
+     * URL foto profil ($user->avatar_url), atau null kalau belum punya foto.
+     * Butuh `php artisan storage:link` supaya folder storage bisa diakses dari browser.
+     */
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::get(fn () => $this->avatar ? asset('storage/'.$this->avatar) : null);
+    }
 
     public function isAdmin(): bool
     {

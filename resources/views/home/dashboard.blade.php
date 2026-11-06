@@ -9,42 +9,7 @@
         {{-- ================= HEADER + NAVIGATION ================= --}}
         <div class="flex w-full items-end justify-between pt-4">
 
-            {{-- NAVIGATION --}}
-            <nav class="flex items-end gap-1">
-
-                {{-- HOME --}}
-                <a href="{{ route('home') }}"
-                    class="flex h-[84px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Home
-                </a>
-
-
-                {{-- FACILITIES --}}
-                <a href="{{ route('facilities.index') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Facilities
-                </a>
-
-
-                {{-- BOOKINGS --}}
-                <a href="{{ route('bookings.index') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Bookings
-                </a>
-
-                {{-- HISTORY --}}
-                <a href="{{ route('history.index') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    History
-                </a>    
-
-                {{-- PROFILE --}}
-                <a href="{{ route('profile.edit') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#343434] text-lg font-semibold text-white">
-                    Profile
-                </a>
-
-            </nav>
+            @include('layouts.partials.navbar', ['tabBg' => 'bg-[#343434]'])
 
             {{-- HEADER --}}
             @include('layouts.partials.header')
@@ -65,7 +30,7 @@
             ">
 
                 {{-- TEXT --}}
-                <div class="w-1/2">
+                <div class="w-1/2 animate-fade-up">
 
                     <h1 class="
                             text-[38px]
@@ -95,7 +60,7 @@
             <div class="grid w-full pt-[35px] pb-[35px] grid-cols-3 gap-[67px]">
 
                 {{-- CARD 1 --}}
-                <div class="flex h-[128px] items-center rounded-lg bg-[#f5f5f5] px-6">
+                <div style="animation-delay: 120ms" class="flex h-[128px] animate-fade-up items-center rounded-lg bg-[#f5f5f5] px-6 transition duration-300 hover:-translate-y-1.5 hover:shadow-xl">
 
                     <img
                         src="{{ asset('image/book-icon.png') }}"
@@ -108,9 +73,7 @@
                             Active Loans
                         </p>
 
-                        <p class="text-[42px] font-medium leading-none text-[#343434]">
-                            2
-                        </p>
+                        <p class="text-[42px] font-medium leading-none text-[#343434]" data-count="{{ $activeLoans }}">{{ $activeLoans }}</p>
 
                         <p class="mt-1 text-[15px] text-[#343434]">
                             Ongoing
@@ -121,7 +84,7 @@
 
 
                 {{-- CARD 2 --}}
-                <div class="flex h-[128px] items-center rounded-lg bg-[#f5f5f5] px-6">
+                <div style="animation-delay: 230ms" class="flex h-[128px] animate-fade-up items-center rounded-lg bg-[#f5f5f5] px-6 transition duration-300 hover:-translate-y-1.5 hover:shadow-xl">
 
                     <img
                         src="{{ asset('image/checklist-icon.png') }}"
@@ -134,9 +97,7 @@
                             Requests Approved
                         </p>
 
-                        <p class="text-[42px] font-medium leading-none text-[#343434]">
-                            1
-                        </p>
+                        <p class="text-[42px] font-medium leading-none text-[#343434]" data-count="{{ $approvedThisMonth }}">{{ $approvedThisMonth }}</p>
 
                         <p class="mt-1 text-[15px] text-[#343434]">
                             This Month
@@ -147,7 +108,7 @@
 
 
                 {{-- CARD 3 --}}
-                <div class="flex h-[128px] items-center rounded-lg bg-[#f5f5f5] px-6">
+                <div style="animation-delay: 340ms" class="flex h-[128px] animate-fade-up items-center rounded-lg bg-[#f5f5f5] px-6 transition duration-300 hover:-translate-y-1.5 hover:shadow-xl">
 
                     <img
                         src="{{ asset('image/clock-icon.png') }}"
@@ -160,9 +121,7 @@
                             Pending Approval
                         </p>
 
-                        <p class="text-[42px] font-medium leading-none text-[#343434]">
-                            3
-                        </p>
+                        <p class="text-[42px] font-medium leading-none text-[#343434]" data-count="{{ $awaitingConfirmation }}">{{ $awaitingConfirmation }}</p>
 
                         <p class="mt-1 text-[15px] text-[#343434]">
                             Required
@@ -175,7 +134,7 @@
 
 
             {{-- ================= FEATURED FACILITIES ================= --}}
-            <section class="
+            <section data-reveal class="
             relative
             w-full
             rounded-lg

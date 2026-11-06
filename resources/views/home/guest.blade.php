@@ -9,30 +9,7 @@
         {{-- ================= HEADER + NAVIGATION ================= --}}
         <div class="flex w-full items-end justify-between pt-4">
 
-            {{-- NAVIGATION --}}
-            <nav class="flex items-end gap-1">
-
-                {{-- HOME --}}
-                <a href="{{ route('home') }}"
-                    class="flex h-[84px] w-[190px] items-center justify-center rounded-t-lg bg-[#303030] text-lg font-semibold text-white">
-                    Home
-                </a>
-
-
-                {{-- FACILITIES --}}
-                <a href="{{ route('facilities.index') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#303030] text-lg font-semibold text-white">
-                    Facilities
-                </a>
-
-
-                {{-- LOGIN --}}
-                <a href="{{ route('login') }}"
-                    class="flex h-[42px] w-[190px] items-center justify-center rounded-t-lg bg-[#303030] text-lg font-semibold text-white">
-                    Login
-                </a>
-
-            </nav>
+            @include('layouts.partials.navbar')
 
             {{-- HEADER --}}
             @include('layouts.partials.header')
@@ -103,7 +80,7 @@
                     ">
 
                     <img src="{{ asset('image/building-picture.png') }}" alt="School Building"
-                        class="w-[570px] max-w-full object-contain">
+                        class="w-[570px] max-w-full animate-float object-contain">
 
                 </div>
 
@@ -111,7 +88,7 @@
 
 
             {{-- ================= FEATURED FACILITIES ================= --}}
-            <section class="
+            <section data-reveal class="
             relative
             w-full
             rounded-lg
