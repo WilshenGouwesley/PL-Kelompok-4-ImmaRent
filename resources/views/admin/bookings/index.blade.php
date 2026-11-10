@@ -78,7 +78,7 @@
                                     </span>
                                     <span class="inline-flex items-center gap-2">
                                         <img src="{{ asset('image/profile-icon.png') }}" alt="">
-                                        {{ $booking->user->name }} &bull; {{ $booking->user->class }}
+                                        {{ $booking->user->name }} &bull; {{ $booking->class ?: $booking->user->class }}
                                     </span>
                                     <span class="inline-flex items-center gap-2">
                                         <img src="{{ asset('image/edit-icon.png') }}" alt="">

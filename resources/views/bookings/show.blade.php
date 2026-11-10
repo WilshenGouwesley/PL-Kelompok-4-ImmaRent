@@ -91,6 +91,10 @@
                             <dd class="mt-0.5 text-[16px] font-medium text-[#303030]">{{ $booking->facility->location }}</dd>
                         </div>
                         <div>
+                            <dt class="text-[13px] text-gray-500">Class</dt>
+                            <dd class="mt-0.5 text-[16px] font-medium text-[#303030]">{{ $booking->class ?: $booking->user->class ?: '-' }}</dd>
+                        </div>
+                        <div>
                             <dt class="text-[13px] text-gray-500">Purpose</dt>
                             <dd class="mt-0.5 text-[16px] font-medium text-[#303030]">{{ $booking->purpose }}</dd>
                         </div>

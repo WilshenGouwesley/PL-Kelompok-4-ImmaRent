@@ -55,7 +55,7 @@
                         {{-- IMAGE --}}
                         <div class="h-[128px] w-[173px] shrink-0 overflow-hidden rounded-lg bg-white">
                             <img
-                                src="{{ asset('image/transparan.png') }}"
+                                src="{{ $notification['image'] ?? asset('image/transparan.png') }}"
                                 alt="{{ $notification['facility_name'] }}"
                                 class="h-full w-full object-cover"
                             >

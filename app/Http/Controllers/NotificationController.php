@@ -31,6 +31,7 @@ class NotificationController extends Controller
             return [
                 'id' => $notification->id,
                 'facility_name' => $facility?->name ?? $notification->title,
+                'image' => $facility?->image ? asset('storage/' . $facility->image) : asset('image/transparan.png'),
                 'date' => $booking?->booking_date->format('d F Y') ?? '-',
                 'start_time' => $booking ? Carbon::parse($booking->start_time)->format('H:i') : '-',
                 'end_time' => $booking ? Carbon::parse($booking->end_time)->format('H:i') : '-',

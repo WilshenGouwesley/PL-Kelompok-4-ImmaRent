@@ -124,7 +124,7 @@
                                     {{-- IMAGE --}}
                                     <div class="h-[145px] w-full overflow-hidden rounded-lg">
                                         <img
-                                            src="{{ asset($facility['image']) }}"
+                                            src="{{ $facility['image'] }}"
                                             alt="{{ $facility['name'] }}"
                                             class="h-full w-full object-cover"
                                         >

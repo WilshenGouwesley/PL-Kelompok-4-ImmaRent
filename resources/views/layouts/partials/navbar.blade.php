@@ -11,8 +11,8 @@
         ? [
             // halaman Notifications (lonceng) juga menyorot tab Home, sesuai wireframe
             ['label' => 'Home', 'route' => 'dashboard', 'active' => request()->routeIs('dashboard') || request()->routeIs('notifications.*')],
-            ['label' => 'Facilities', 'route' => 'facilities.index', 'active' => request()->routeIs('facilities.*')],
-            ['label' => 'Bookings', 'route' => 'bookings.index', 'active' => request()->routeIs('bookings.*')],
+            ['label' => 'Facilities', 'route' => 'facilities.index', 'active' => request()->routeIs('facilities.*') || request()->routeIs('bookings.create')],
+            ['label' => 'Bookings', 'route' => 'bookings.index', 'active' => request()->routeIs('bookings.*') && ! request()->routeIs('bookings.create')],
             ['label' => 'History', 'route' => 'history.index', 'active' => request()->routeIs('history.*')],
             $isAdmin
                 ? [

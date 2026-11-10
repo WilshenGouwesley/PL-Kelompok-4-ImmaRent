@@ -20,6 +20,7 @@ class Booking extends Model
         'start_time',
         'end_time',
         'purpose',
+        'class',
         'status',
         'approved_at',
         'approved_by',
@@ -74,10 +75,7 @@ class Booking extends Model
         return $query->where('status', 'pending');
     }
 
-    /**
-     * Peminjaman aktif: sudah disetujui dan BELUM selesai (akan datang atau sedang berlangsung).
-     * Memakai zona waktu aplikasi (Asia/Pontianak), karena jam booking adalah jam dinding lokal.
-     */
+
     public function scopeActiveLoans(Builder $query): Builder
     {
         $today = now()->toDateString();
@@ -89,18 +87,13 @@ class Booking extends Model
         });
     }
 
-    /** Booking yang disetujui pada bulan berjalan (dihitung dari waktu persetujuan). */
+    /** Booking yang disetujui pada bulan berjalan */
     public function scopeApprovedThisMonth(Builder $query): Builder
     {
         return $query->where('status', 'approved')
             ->whereBetween('approved_at', [now()->startOfMonth(), now()->endOfMonth()]);
     }
 
-    /**
-     * Filter gabungan untuk halaman Bookings, History, dan Booking Requests (admin):
-     * ['date' => Y-m-d, 'category' => ..., 'status' => ..., 'search' => nama fasilitas].
-     * Kunci yang kosong/tidak ada diabaikan.
-     */
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query
@@ -116,11 +109,7 @@ class Booking extends Model
             ));
     }
 
-    /**
-     * Booking aktif (pending/approved) yang bentrok dengan rentang waktu tertentu.
-     * Bentrok jika: mulai_lama < selesai_baru DAN selesai_lama > mulai_baru
-     * (slot yang hanya bersambung, mis. 08:00-10:00 lalu 10:00-12:00, tidak dianggap bentrok).
-     */
+
     public function scopeOverlapping(Builder $query, int $facilityId, string $date, string $start, string $end): Builder
     {
         return $query
@@ -133,9 +122,7 @@ class Booking extends Model
 
     // ================= HELPERS =================
 
-    /**
-     * Bentuk array yang dipakai kartu booking di view Bookings & History.
-     */
+
     public function toCard(): array
     {
         $note = match ($this->status) {
@@ -148,6 +135,7 @@ class Booking extends Model
         return [
             'id' => $this->id,
             'facility_name' => $this->facility->name,
+            'image' => $this->facility->image ? asset('storage/' . $this->facility->image) : asset('image/transparan.png'),
             'date' => $this->booking_date->format('d F Y'),
             'start_time' => Carbon::parse($this->start_time)->format('H:i'),
             'end_time' => Carbon::parse($this->end_time)->format('H:i'),

@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Facility;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class BookingController extends Controller
 {
@@ -29,9 +30,46 @@ class BookingController extends Controller
 
     public function create(Facility $facility)
     {
+        // Jadwal yang sudah terisi (pending/approved) mulai hari ini, per tanggal, untuk kalender di form.
+        $busy = $facility->bookings()
+            ->whereIn('status', ['pending', 'approved'])
+            ->whereDate('booking_date', '>=', now()->toDateString())
+            ->orderBy('booking_date')
+            ->orderBy('start_time')
+            ->get(['booking_date', 'start_time', 'end_time'])
+            ->groupBy(fn (Booking $booking) => $booking->booking_date->toDateString())
+            ->map(fn ($group) => $group
+                ->map(fn (Booking $booking) => [substr($booking->start_time, 0, 5), substr($booking->end_time, 0, 5)])
+                ->values()
+                ->all())
+            ->all();
+
+        $slots = $this->timeSlots();
+
         return view('bookings.create', [
             'facility' => $facility,
+            'busy' => $busy,
+            'classes' => config('school.classes'),
+            'startSlots' => array_slice($slots, 0, -1),
+            'endSlots' => array_slice($slots, 1),
+            // tanggal & jam "sekarang" menurut server, supaya kalender tidak bergantung jam perangkat pengguna
+            'today' => now()->toDateString(),
+            'nowTime' => now()->format('H:i'),
         ]);
+    }
+
+    /** Pilihan jam untuk dropdown, mis. 07:00, 07:30, ... 17:00 (nilai 24 jam, label 12 jam). */
+    protected function timeSlots(): array
+    {
+        $hours = config('school.booking_hours');
+        $close = Carbon::createFromFormat('!H:i', $hours['close']);
+        $slots = [];
+
+        for ($time = Carbon::createFromFormat('!H:i', $hours['open']); $time->lte($close); $time->addMinutes($hours['step'])) {
+            $slots[] = ['value' => $time->format('H:i'), 'label' => $time->format('h:i A')];
+        }
+
+        return $slots;
     }
 
     public function store(StoreBookingRequest $request)

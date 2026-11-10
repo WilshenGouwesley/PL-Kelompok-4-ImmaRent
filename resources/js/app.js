@@ -1,16 +1,5 @@
-/*
-|--------------------------------------------------------------------------
-| Interaksi front-end ringan (tanpa library)
-|--------------------------------------------------------------------------
-| 1. [data-count]  : angka menghitung naik dari 0 saat terlihat
-| 2. [data-reveal] : bagian halaman muncul halus saat di-scroll
-| 3. [data-flash]  : pesan sukses hilang sendiri setelah beberapa detik
-| 4. form POST     : tombol kirim menampilkan indikator & dikunci (cegah kirim ganda)
-*/
-
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** Jalankan callback sekali saat elemen pertama kali terlihat. */
 function whenVisible(elements, callback, threshold = 0.25) {
     if (! ('IntersectionObserver' in window)) {
         elements.forEach(callback);
@@ -34,7 +23,7 @@ function countUp(element) {
     const target = Number.parseInt(element.dataset.count, 10);
 
     if (Number.isNaN(target) || target <= 0 || reduceMotion) {
-        return; // teks asli dari server sudah berisi angka akhir
+        return; 
     }
 
     const duration = 900;
@@ -43,7 +32,7 @@ function countUp(element) {
 
     const tick = (now) => {
         const progress = Math.min((now - startedAt) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const eased = 1 - Math.pow(1 - progress, 3);
 
         element.textContent = String(Math.round(target * eased));
 
@@ -85,26 +74,22 @@ function setupSubmitLoading() {
     document.addEventListener('submit', (event) => {
         const form = event.target;
 
-        // dibatalkan (mis. konfirmasi "Cancel" ditolak) atau pencarian GET: biarkan apa adanya
         if (event.defaultPrevented || ! (form instanceof HTMLFormElement) || form.method.toLowerCase() === 'get') {
             return;
         }
 
         const button = form.querySelector('button[type="submit"], button:not([type])');
 
-        // tombol ikon tanpa teks (mis. centang/silang) dilewati agar tata letaknya tidak bergeser
         if (! button || button.disabled || button.textContent.trim() === '') {
             return;
         }
 
-        // ditunda sejenak supaya data form sudah terbaca sebelum tombol dikunci
         setTimeout(() => {
             button.setAttribute('data-loading', '');
             button.disabled = true;
         }, 0);
     });
 
-    // tombol "Back" di browser bisa memulihkan halaman dari cache dengan tombol masih terkunci
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
             document.querySelectorAll('button[data-loading]').forEach((button) => {
@@ -116,6 +101,11 @@ function setupSubmitLoading() {
 }
 
 function init() {
+    const bookingForm = document.querySelector('[data-booking-calendar]');
+    if (bookingForm) {
+        import('./booking-calendar.js').then(({ initBookingCalendar }) => initBookingCalendar(bookingForm));
+    }
+
     whenVisible([...document.querySelectorAll('[data-count]')], countUp);
 
     const revealables = [...document.querySelectorAll('[data-reveal]')];
